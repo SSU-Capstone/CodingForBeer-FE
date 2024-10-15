@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  navigate('/editor');
+  useEffect(()=>{
+    navigate('/editor');
+  }, []);
   return <h2>Dashboard</h2>;
 };
 
