@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBar from '../components/NavBar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -10,6 +10,9 @@ import Fade from '@mui/material/Fade';
 import SocialGoogle from '../components/SocialGoogle';
 import SocialKakao from '../components/SocialKakao';
 import Box from '@mui/material/Box'
+import { useRecoilState } from 'recoil';
+import { loginState } from '../recoilState';
+import { AccountCircle } from '@mui/icons-material';
 
 const style = {
   position: 'absolute',
@@ -24,27 +27,29 @@ const style = {
 };  
 
 const Home = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
   return (
     <>
       <NavBar>
       
-      <IconButton
+        <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Home
-          </Typography>
-          <Button color="inherit" onClick={handleOpen}>Login</Button>
-        </NavBar>
+        <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Home
+        </Typography>
+        { isLogin ? <AccountCircle /> :<Button color="inherit" onClick={handleOpen}>Login</Button> }
+      </NavBar>
 
       <Modal
         aria-labelledby="transition-modal-title"
