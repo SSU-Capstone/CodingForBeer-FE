@@ -15,24 +15,13 @@ import { loginState } from '../recoilState';
 import { AccountCircle } from '@mui/icons-material';
 import LoginoutButton from '../components/LoginoutButton';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};  
+ 
 
 const Home = () => {
 
   return (
     <>
       <NavBar>
-      
         <IconButton
             size="large"
             edge="start"
@@ -46,10 +35,7 @@ const Home = () => {
           Home
         </Typography>
         <LoginoutButton />
-        
       </NavBar>
-
-      
     </>
   );
 };
