@@ -13,6 +13,7 @@ import Box from '@mui/material/Box'
 import { useRecoilState } from 'recoil';
 import { loginState } from '../recoilState';
 import { AccountCircle } from '@mui/icons-material';
+import LoginoutButton from '../components/LoginoutButton';
 
 const style = {
   position: 'absolute',
@@ -27,11 +28,7 @@ const style = {
 };  
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
   return (
     <>
       <NavBar>
@@ -48,34 +45,11 @@ const Home = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Home
         </Typography>
-        { isLogin ? <AccountCircle /> :<Button color="inherit" onClick={handleOpen}>Login</Button> }
+        <LoginoutButton />
+        
       </NavBar>
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Log in
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              <SocialGoogle />
-              <SocialKakao />
-            </Typography>
-          </Box>
-        </Fade>
-      </Modal>
+      
     </>
   );
 };
