@@ -13,10 +13,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import VerticalSplitIcon from '@mui/icons-material/VerticalSplit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DownloadIcon from '@mui/icons-material/Download';
+import ReactCodeMirror from '@uiw/react-codemirror';
 
 const Editor = () => {
     const [markdown, setMarkdown] = useState('# title 1')
-    const handleUpdate = (e) => setMarkdown(e.target.value)
+    const handleUpdate = (e) => {
+        setMarkdown(e)
+    }
 
   const [mode, setMode] = useState('both'); // edit, both, preview
 
@@ -73,13 +76,19 @@ const Editor = () => {
         <div className='flex'>
             {mode == "edit" && (
                 <TextEditor>
-                    <textarea value={markdown} onChange={handleUpdate} />
+                    <ReactCodeMirror
+                        height="100px"
+                        onChange={handleUpdate}
+                    />
                 </TextEditor>
             )}
             {mode == "both" && (
                 <>
                     <TextEditor>
-                        <textarea value={markdown} onChange={handleUpdate} className='w-full h-full' />
+                        <ReactCodeMirror
+                            height="100px"
+                            onChange={handleUpdate}
+                        />
                     </TextEditor>
                     <PPTRender markdown={markdown} />
                 </>
