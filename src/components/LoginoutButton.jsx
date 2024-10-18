@@ -21,30 +21,15 @@ const style = {
 
 const LoginoutButton = () => {
     const [isLogin, setIsLogin] = useRecoilState(loginState);
-
-    
-    const [auth, setAuth] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
-  
-    const [mode, setMode] = useState();
-  
-    const handleChange = (event) => {
-      setAuth(event.target.checked);
-    };
-  
-    const handleMenu = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
   
     const handleClose = () => {
-      setAnchorEl(null);
       setOpen(false);
     };
 
     const navigate = useNavigate();
     const handleLogout = () => {
-        setIsLogin(false);
-        navigate('/');
+      setIsLogin(false);
+      navigate('/');
     }
     
   const [open, setOpen] = useState(false);
@@ -52,37 +37,7 @@ const LoginoutButton = () => {
     return (
         <>
         {isLogin ? 
-            <>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleLogout}>Log out</MenuItem>
-              </Menu>
-            </>
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
             :
             <>
                 <Button color="inherit" onClick={handleOpen}>Login</Button>
@@ -102,15 +57,13 @@ const LoginoutButton = () => {
                     <Fade in={open}>
                     <Box sx={style}>
                         <Typography id="transition-modal-title" variant="h6" component="h2">
-                        Log in
+                          Log in
                         </Typography>
-                        <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                         <SocialGoogle />
                         <SocialKakao />
-                        </Typography>
                     </Box>
                     </Fade>
-                </Modal> 
+                </Modal>
             </>
         }
         </>
