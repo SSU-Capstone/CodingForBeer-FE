@@ -81,37 +81,40 @@ export default function Dashborad() {
     <>
       <NavBar title={'Dashborad'}>
         <Button
-          id="demo-customized-button"
-          aria-controls={open ? 'demo-customized-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          variant="contained"
-          disableElevation
-          onClick={handleClick}
-          endIcon={<KeyboardArrowDownIcon />}
+            id="demo-customized-button"
+            aria-controls={open ? 'demo-customized-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            variant="contained"
+            disableElevation
+            onClick={handleClick}
+            endIcon={<KeyboardArrowDownIcon/>}
         >
           Groups
         </Button>
         <StyledMenu
-          id="demo-customized-menu"
-          MenuListProps={{
-            'aria-labelledby': 'demo-customized-button',
-          }}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
+            id="demo-customized-menu"
+            MenuListProps={{
+              'aria-labelledby': 'demo-customized-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
         >
-          {groups.map((group, idx)=>{
+          {groups.map((group, idx) => {
             return (
-              <MenuItem onClick={handleClose} key={idx} id={group.name}>
-                {group.name}
-              </MenuItem>
+                <MenuItem onClick={handleClose} key={idx} id={group.name}>
+                  {group.name}
+                </MenuItem>
             );
           })}
         </StyledMenu>
       </NavBar>
 
-      <DocumentView docs={docs[groupId]} />
+      <div className='flex flex-col p-4 gap-10'>
+        <h1 className={'font-bold text-3xl'}>{groupId}</h1>
+        <DocumentView docs={docs[groupId]}/>
+      </div>
     </>
   );
 }

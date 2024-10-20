@@ -1,4 +1,3 @@
-import { AccountCircle } from "@mui/icons-material";
 import { Backdrop, Box, Button, Fade, IconButton, Menu, MenuItem, Modal, Typography } from "@mui/material";
 import { useRecoilState } from "recoil";
 import { loginState } from "../recoilState";
@@ -14,9 +13,14 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
+    borderRadius: '2rem',
     p: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '300px',
+    height: '100%',
+    justifyContent: 'space-around',
   }; 
 
 const LoginoutButton = () => {
@@ -57,10 +61,13 @@ const LoginoutButton = () => {
                     <Fade in={open}>
                     <Box sx={style}>
                         <Typography id="transition-modal-title" variant="h6" component="h2">
-                          Log in
+                          로그인
                         </Typography>
-                        <SocialGoogle />
-                        <SocialKakao />
+
+                        <div className={'flex flex-col gap-5'}>
+                          <SocialGoogle />
+                          <SocialKakao />
+                        </div>
                     </Box>
                     </Fade>
                 </Modal>
