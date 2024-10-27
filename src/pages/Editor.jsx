@@ -168,8 +168,8 @@ const Editor = () => {
   }, [currentTheme]);
 
   return (
-    <div className="flex flex-col">
-      <NavBar floting={true}>
+    <div className="flex flex-col max-h-screen">
+      <NavBar>
         <IconButton
           size="large"
           edge="start"
@@ -250,7 +250,7 @@ const Editor = () => {
         </select>
       </NavBar>
 
-      <div className="flex h-full mt-[64px] min-h-screen">
+      <div className="flex h-full max-h-[calc(100vh-64px)]">
         {mode === 'edit' && (
           <TextEditor mode={mode}>
             <div ref={ref} />
