@@ -1,67 +1,268 @@
+import { useEffect, useRef, useState } from 'react';
+import PPTRender from '../components/PPTRender';
+import TextEditor from '../components/TextEditor';
 import NavBar from '../components/NavBar';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import {Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
-import Box from "@mui/material/Box";
-import {useState} from "react";
+import EditIcon from '@mui/icons-material/Edit';
+import VerticalSplitIcon from '@mui/icons-material/VerticalSplit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DownloadIcon from '@mui/icons-material/Download';
 
-function InboxIcon() {
-  return null;
-}
+import { basicSetup, EditorView } from 'codemirror';
+import { keymap } from '@codemirror/view';
+import {
+  markdown,
+  markdownKeymap,
+  markdownLanguage,
+} from '@codemirror/lang-markdown';
+import { Transaction, StateEffect } from '@codemirror/state';
+import yorkie from 'yorkie-js-sdk';
 
-function MailIcon() {
-  return null;
-}
+import { oneDark } from '@codemirror/theme-one-dark';
+import { dracula } from '@uiw/codemirror-theme-dracula';
+import { githubLight } from '@uiw/codemirror-theme-github';
+
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
+  const [md, setMd] = useState('');
+  const [mode, setMode] = useState('both');
+  const [currentTheme, setCurrentTheme] = useState(oneDark);
+  const ref = useRef();
+  const view = useRef();
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
+  const docRef = useRef(null);
+  const clientRef = useRef(null);
 
-  const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        <ListItemButton>
-          <ListItemIcon>
-          </ListItemIcon>
-          <ListItemText primary={'대시보드'} />
-        </ListItemButton>
-        {/* 나머지 항목 추가 */}
-      </List>
-    </Box>
-  );
+  const updateListener = EditorView.updateListener.of((viewUpdate) => {
+    if (viewUpdate.docChanged) {
+      for (const tr of viewUpdate.transactions) {
+        const events = ['select', 'input', 'delete', 'move', 'undo', 'redo'];
+        if (!events.map((event) => tr.isUserEvent(event)).some(Boolean)) {
+          continue;
+        }
+        if (tr.annotation(Transaction.remote)) {
+          continue;
+        }
+        let adj = 0;
+        tr.changes.iterChanges((fromA, toA, _, __, inserted) => {
+          const insertText = inserted.toJSON().join('\n');
+          docRef.current.update(
+            (root) => {
+              root.content.edit(fromA + adj, toA + adj, insertText);
+            },
+            `update content by ${clientRef.current.getID()}`,
+          );
+          adj += insertText.length - (toA - fromA);
+        });
+      }
+      setMd(viewUpdate.state.doc.toString());
+    }
+  });
 
+  async function main(editorParentElem) {
+    clientRef.current = new yorkie.Client(import.meta.env.VITE_YORKIE_API_ADDR, {
+      apiKey: import.meta.env.VITE_YORKIE_API_KEY,
+    });
+    const client = clientRef.current;
+    await client.activate();
+
+    docRef.current = new yorkie.Document('my-first-document');
+    const doc = docRef.current;
+    await client.attach(doc);
+    doc.update(
+      (root) => {
+        if (!root.content) {
+          root.content = new yorkie.Text();
+        }
+      },
+      'create content if not exists',
+    );
+
+    const syncText = () => {
+      const text = doc.getRoot().content;
+      view.current.dispatch({
+        changes: {
+          from: 0,
+          to: view.current.state.doc.length,
+          insert: text.toString(),
+        },
+        annotations: [Transaction.remote.of(true)],
+      });
+      setMd(view.current.state.doc.toString());
+    };
+
+    doc.subscribe('$.content', (event) => {
+      if (event.type === 'remote-change') {
+        const { operations } = event.value;
+        handleOperations(operations);
+      }
+    });
+
+    await client.sync();
+
+    view.current = new EditorView({
+      doc: '',
+      extensions: [
+        basicSetup,
+        markdown({ base: markdownLanguage }),
+        keymap.of(markdownKeymap),
+        updateListener,
+        currentTheme, // 선택된 테마 적용
+      ],
+      parent: editorParentElem,
+      style: {
+        height: '100%',
+        overflow: 'auto',
+      },
+    });
+
+    function handleOperations(operations) {
+      for (const op of operations) {
+        if (op.type === 'edit') {
+          handleEditOp(op);
+        }
+      }
+    }
+    function handleEditOp(op) {
+      const changes = [
+        {
+          from: Math.max(0, op.from),
+          to: Math.max(0, op.to),
+          insert: op.value.content,
+        },
+      ];
+      view.current.dispatch({
+        changes,
+        annotations: [Transaction.remote.of(true)],
+      });
+      setMd(view.current.state.doc.toString());
+    }
+
+    syncText();
+  }
+
+  useEffect(() => {
+    main(ref.current);
+  }, [mode]);
+
+  // 테마 변경 시 에디터에 적용
+  useEffect(() => {
+    if (view.current) {
+      view.current.dispatch({
+        effects: StateEffect.reconfigure.of([
+          basicSetup,
+          markdown({ base: markdownLanguage }),
+          keymap.of(markdownKeymap),
+          updateListener,
+          currentTheme,
+        ]),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTheme]);
+
+  console.log(mode);
   return (
-    <>
-      <NavBar title={'Home'}>
+    <div className="max-h-screen">
+      <NavBar>
         <IconButton
           size="large"
           edge="start"
           color="inherit"
           aria-label="menu"
           sx={{mr: 2}}
-          onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-        <Drawer open={open} onClose={toggleDrawer(false)}>
-          {DrawerList}
-        </Drawer>
+          onClick={() => {
+            setMode('edit');
+          }}
+        >
+          <EditIcon/>
+        </IconButton>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{mr: 2}}
+          onClick={() => {
+            setMode('both');
+          }}
+        >
+          <VerticalSplitIcon/>
+        </IconButton>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{mr: 2}}
+          onClick={() => {
+            setMode('preview');
+          }}
+        >
+          <VisibilityIcon/>
+        </IconButton>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{mr: 2}}
+        >
+          <DownloadIcon/>
+        </IconButton>
+        <select
+          onChange={(e) => {
+            const theme = e.target.value;
+            switch (theme) {
+              case 'oneDark':
+                setCurrentTheme(oneDark);
+                break;
+              case 'dracula':
+                setCurrentTheme(dracula);
+                break;
+              case 'githubLight':
+                setCurrentTheme(githubLight);
+                break;
+              default:
+                setCurrentTheme(oneDark);
+            }
+          }}
+          style={{
+            color: 'white',
+            backgroundColor: '#3f51b5',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px',
+            marginLeft: '16px',
+          }}
+        >
+          <option value="oneDark">One Dark</option>
+          <option value="dracula">Dracula</option>
+          <option value="githubLight">GitHub Light</option>
+        </select>
       </NavBar>
-      <div className={'flex flex-col mx-auto w-5/6 h-full mt-6 gap-12'}>
-        <div
-          className={'flex justify-center items-center w-full mx-auto h-64 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 z-10'}>
-          <span className={'text-white text-xl break-all font-bold md:text-4xl sm:text-2xl'}>Conflict-free 마크다운 슬라이드 편집기를 만나보세요!</span>
-        </div>
 
-        <div className={'w-full'}>
-          <span className={'font-bold text-2xl text-slate-600'}>최근 문서</span>
-          {/*TODO: 나중에 최근 항목 만들 때 DASHBOARD의 Grid항목을 참고해 추가*/}
-        </div>
+      <div className="flex h-full">
+        {mode === 'edit' && (
+          <TextEditor mode={mode}>
+            <div ref={ref} className="h-full"/>
+          </TextEditor>
+        )}
+        {mode === 'both' && (
+          <>
+            <TextEditor>
+              <div ref={ref} className="h-full"/>
+            </TextEditor>
+            <PPTRender markdown={md}/>
+          </>
+        )}
+        {mode === 'preview' && (
+          <div className="w-full h-full overflow-auto">
+            <PPTRender markdown={md}/>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

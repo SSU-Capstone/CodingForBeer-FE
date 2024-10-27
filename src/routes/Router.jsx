@@ -5,15 +5,15 @@ import Dashboard from '../pages/Dashboard';
 import Editor from '../pages/Editor';
 
 const Router = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/editor" element={<Editor />} />
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/editor" element={<Editor />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default Router;
