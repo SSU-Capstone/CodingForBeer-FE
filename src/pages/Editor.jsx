@@ -22,13 +22,19 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { githubLight } from '@uiw/codemirror-theme-github';
 
-
 const Editor = () => {
   const [md, setMd] = useState('');
   const [mode, setMode] = useState('both');
   const [currentTheme, setCurrentTheme] = useState(oneDark);
+  const [backgroundColor, setBackgroundColor] = useState('#282c34');
   const ref = useRef();
   const view = useRef();
+
+  const themeBackgroundColors = {
+    oneDark: '#282c34',
+    dracula: '#282a36',
+    githubLight: '#ffffff',
+  };
 
   const docRef = useRef(null);
   const clientRef = useRef(null);
@@ -107,7 +113,7 @@ const Editor = () => {
         markdown({ base: markdownLanguage }),
         keymap.of(markdownKeymap),
         updateListener,
-        currentTheme, // 선택된 테마 적용
+        currentTheme,
       ],
       parent: editorParentElem,
       style: {
@@ -143,9 +149,9 @@ const Editor = () => {
 
   useEffect(() => {
     main(ref.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  // 테마 변경 시 에디터에 적용
   useEffect(() => {
     if (view.current) {
       view.current.dispatch({
@@ -161,71 +167,73 @@ const Editor = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTheme]);
 
-  console.log(mode);
   return (
-    <div className="max-h-screen">
-      <NavBar>
+    <div className="flex flex-col">
+      <NavBar floting={true}>
         <IconButton
           size="large"
           edge="start"
           color="inherit"
           aria-label="menu"
-          sx={{mr: 2}}
+          sx={{ mr: 2 }}
           onClick={() => {
             setMode('edit');
           }}
         >
-          <EditIcon/>
+          <EditIcon />
         </IconButton>
         <IconButton
           size="large"
           edge="start"
           color="inherit"
           aria-label="menu"
-          sx={{mr: 2}}
+          sx={{ mr: 2 }}
           onClick={() => {
             setMode('both');
           }}
         >
-          <VerticalSplitIcon/>
+          <VerticalSplitIcon />
         </IconButton>
         <IconButton
           size="large"
           edge="start"
           color="inherit"
           aria-label="menu"
-          sx={{mr: 2}}
+          sx={{ mr: 2 }}
           onClick={() => {
             setMode('preview');
           }}
         >
-          <VisibilityIcon/>
+          <VisibilityIcon />
         </IconButton>
         <IconButton
           size="large"
           edge="start"
           color="inherit"
           aria-label="menu"
-          sx={{mr: 2}}
+          sx={{ mr: 2 }}
         >
-          <DownloadIcon/>
+          <DownloadIcon />
         </IconButton>
         <select
           onChange={(e) => {
             const theme = e.target.value;
+            let selectedTheme;
             switch (theme) {
               case 'oneDark':
-                setCurrentTheme(oneDark);
+                selectedTheme = oneDark;
                 break;
               case 'dracula':
-                setCurrentTheme(dracula);
+                selectedTheme = dracula;
                 break;
               case 'githubLight':
-                setCurrentTheme(githubLight);
+                selectedTheme = githubLight;
                 break;
               default:
-                setCurrentTheme(oneDark);
+                selectedTheme = oneDark;
             }
+            setCurrentTheme(selectedTheme);
+            setBackgroundColor(themeBackgroundColors[theme]);
           }}
           style={{
             color: 'white',
@@ -242,23 +250,23 @@ const Editor = () => {
         </select>
       </NavBar>
 
-      <div className="flex h-full">
+      <div className="flex h-full mt-[64px] min-h-screen">
         {mode === 'edit' && (
           <TextEditor mode={mode}>
-            <div ref={ref} className="h-full"/>
+            <div ref={ref} />
           </TextEditor>
         )}
         {mode === 'both' && (
           <>
             <TextEditor>
-              <div ref={ref} className="h-full"/>
+              <div ref={ref} />
             </TextEditor>
-            <PPTRender markdown={md}/>
+            <PPTRender markdown={md} backgroundColor={backgroundColor} />
           </>
         )}
         {mode === 'preview' && (
           <div className="w-full h-full overflow-auto">
-            <PPTRender markdown={md}/>
+            <PPTRender markdown={md} backgroundColor={backgroundColor} mode={mode}/>
           </div>
         )}
       </div>

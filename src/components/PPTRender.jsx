@@ -1,13 +1,16 @@
-import { Marp } from '@marp-team/marp-react'
+import { Marp } from '@marp-team/marp-react';
+import clsx from "clsx";
 
-const PPTRender = ({markdown}) => {
-    return (
-        <>
-            <div id='ppt-render' className='w-1/2'>
-                <Marp markdown={markdown} />
-            </div>
-        </>
-    )
+const PPTRender = ({ markdown, backgroundColor, mode }) => {
+  return (
+    <div
+      id="ppt-render"
+      className={clsx("w-1/2 min-h-screen h-auto overflow-y-auto", mode === 'preview' ? 'w-full' : 'w-1/2')}
+      style={{ backgroundColor: backgroundColor }}
+    >
+      <Marp markdown={markdown} />
+    </div>
+  );
 };
 
 export default PPTRender;

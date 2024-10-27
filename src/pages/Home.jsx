@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
 import Box from "@mui/material/Box";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 function InboxIcon() {
   return null;
@@ -15,6 +16,7 @@ function MailIcon() {
 
 const Home = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -23,7 +25,7 @@ const Home = () => {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        <ListItemButton>
+        <ListItemButton onClick={() => navigate('/dashboard')}>
           <ListItemIcon>
           </ListItemIcon>
           <ListItemText primary={'대시보드'} />
