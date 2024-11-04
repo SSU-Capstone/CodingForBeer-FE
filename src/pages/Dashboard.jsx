@@ -6,7 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NavBar from '../components/NavBar';
 import DocumentView from '../components/DocumentView';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -117,14 +118,27 @@ export default function Dashborad() {
             })}
           </Box>
           <hr/>
+          
           <Button onClick={addGroups}>
-            add group
+            <AddIcon />
+            <Typography>
+              group
+            </Typography>
           </Button>
         </StyledMenu>
       </NavBar>
 
       <div className='flex flex-col p-4 gap-10'>
-        <h1 className={'font-bold text-3xl'}>{groupId}</h1>
+        <div className='flex justify-between mx-4'>
+          <h1 className={'font-bold text-3xl'}>{groupId}</h1>
+
+          <Button>
+            <AddIcon />
+            <Typography>
+              document
+            </Typography>
+          </Button>
+        </div>
         <DocumentView docs={docs[groupId]}/>
       </div>
     </>
