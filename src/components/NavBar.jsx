@@ -2,9 +2,9 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import LoginoutButton from './LoginoutButton';
 import { Typography } from '@mui/material';
 import clsx from "clsx";
+import Profile from './Profile';
 
 export default function NavBar({children, title, floting}) {
   return (
@@ -15,7 +15,7 @@ export default function NavBar({children, title, floting}) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {title}
             </Typography>
-            <LoginoutButton />
+            <Profile />
         </Toolbar>
       </AppBar>
     </Box>

@@ -6,6 +6,22 @@ import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NavBar from '../components/NavBar';
 import DocumentView from '../components/DocumentView';
+import { Box, Typography, Divider } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';import * as React from 'react';
+import Modal from '@mui/material/Modal';
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -55,26 +71,48 @@ export default function Dashborad() {
   const open = Boolean(anchorEl);
   const [groupId, setGroupId] = useState('boj');
   
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = (e) => {
-    setGroupId(e.target.id)
+  const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const chageGroup = (e) => {
+    setGroupId(e.target.id);
+  }
+
   const groups = [
-    {name : 'coding for beer', },
+    {name : 'coding for beer'},
     {name : 'asdf'},
     {name : 'boj'},
     {name : 'noj.am'},
   ];
-
+  const members = {
+    'coding for beer' : ['a', 'b', 'c', 'd', 'e'],
+    'asdf' : ['a', 'b'],
+    'boj' : ['a', 'b', 'c'],
+    'noj.am' : ['a'],
+  }
   const docs = {
     'coding for beer' : ['doc1', 'doc2', 'doc3'], 
     'asdf' : ['doc1'],
     'boj' : ['doc1', 'doc2'],
     'noj.am' : ['doc1', 'doc1', 'doc1', 'doc1', 'doc1']
+  }
+
+  const addGroups = () => {
+    // Todo: add group
+    console.log('unimplemented feature')
+  }
+
+  const inviteMember= () => {
+    // Todo: copy invite member code to clipboard
+    console.log('unimplemented feature')
   }
 
   return (
@@ -101,18 +139,61 @@ export default function Dashborad() {
             open={open}
             onClose={handleClose}
         >
-          {groups.map((group, idx) => {
-            return (
-                <MenuItem onClick={handleClose} key={idx} id={group.name}>
+          <Box>
+            {groups.map((group, idx) => {
+              return (
+                <MenuItem onClick={chageGroup} key={idx} id={group.name}>
                   {group.name}
                 </MenuItem>
-            );
-          })}
+              );
+            })}
+          </Box>
+          <Divider sx={{ my: 0.5 }} />
+
+          <Button onClick={addGroups}>
+            <AddIcon />
+            <Typography>
+              group
+            </Typography>
+          </Button>
         </StyledMenu>
       </NavBar>
 
       <div className='flex flex-col p-4 gap-10'>
-        <h1 className={'font-bold text-3xl'}>{groupId}</h1>
+        <div className='flex justify-between mx-4'>
+          <Button onClick={openModal}>
+            <h1 className={'font-bold text-3xl'}>{groupId}</h1>
+          </Button>
+          <Modal
+            open={modalOpen}
+            onClose={closeModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {groupId}
+              </Typography>
+              <Button onClick={inviteMember}>
+                invite member
+              </Button>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                {members[groupId].map((memberId, idx)=>{
+                  return (
+                    <p key={idx}>{memberId}</p>
+                  )
+                })}
+              </Typography>
+            </Box>
+          </Modal>
+
+          <Button>
+            <AddIcon />
+            <Typography>
+              document
+            </Typography>
+          </Button>
+        </div>
         <DocumentView docs={docs[groupId]}/>
       </div>
     </>

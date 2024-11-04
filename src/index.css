@@ -20,3 +20,17 @@
     display: flex;
     flex-direction: column;
 }
+
+/* 스크롤바의 폭 너비 */
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(171, 178, 191);
+    border-radius: 0.3rem;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(220, 220, 220);
+}
