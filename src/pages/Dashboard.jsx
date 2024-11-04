@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NavBar from '../components/NavBar';
 import DocumentView from '../components/DocumentView';
+import { Box } from '@mui/material';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -77,6 +78,11 @@ export default function Dashborad() {
     'noj.am' : ['doc1', 'doc1', 'doc1', 'doc1', 'doc1']
   }
 
+  const addGroups = () => {
+    // Todo: add group
+    console.log('unimplemented feature')
+  }
+
   return (
     <>
       <NavBar title={'Dashborad'}>
@@ -101,13 +107,19 @@ export default function Dashborad() {
             open={open}
             onClose={handleClose}
         >
-          {groups.map((group, idx) => {
-            return (
+          <Box>
+            {groups.map((group, idx) => {
+              return (
                 <MenuItem onClick={handleClose} key={idx} id={group.name}>
                   {group.name}
                 </MenuItem>
-            );
-          })}
+              );
+            })}
+          </Box>
+          <hr/>
+          <Button onClick={addGroups}>
+            add group
+          </Button>
         </StyledMenu>
       </NavBar>
 
