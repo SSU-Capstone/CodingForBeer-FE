@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NavBar from '../components/NavBar';
 import DocumentView from '../components/DocumentView';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography, Divider, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
@@ -107,7 +107,7 @@ export default function Dashborad() {
     .then(data => {
       setGroups(data)
       setGroupId(data[0])
-      setDocuments(groupId)
+      setDocuments(data[0])
     })
     .catch(error => {
       console.error('Error fetching data:', error);
@@ -115,7 +115,7 @@ export default function Dashborad() {
   }, []);
 
   const addGroups = async () => {
-    const groupName = 'tmp';
+    const groupName = newGroupName
     try {
       const response = await fetch(API_ADDR+ '/api/groups', {
         method: 'POST',
@@ -140,8 +140,8 @@ export default function Dashborad() {
     }
   }
 
-  const setDocuments = async () => {
-    const response = await fetch(API_ADDR + `/api/groups/${groupId}/documents`, {
+  const setDocuments = async (groupName) => {
+    const response = await fetch(API_ADDR + `/api/groups/${groupName}/documents`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -152,13 +152,27 @@ export default function Dashborad() {
     const data = await response.json();
     setUserDocuments(data.document || []);
   }
+
+  const [addGroupModal, setAddGroupModal] = useState(false);
+  const closeModal3 = () => setAddGroupModal(false);
+  const handleAddGroups = () => {
+    setAddGroupModal(true)
+  }
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const closeModal2 = () => setModalOpen2(false);
+
   const handleAddDocument = () => {
-    const docName = 'doc1';
-    console.log(docName)
-    addDocuments(docName)
+    setModalOpen2(true);
   }
 
-  const addDocuments = async (documentName) => {
+  const [newGroupName, setNewGroupName] = useState(null);
+  const handleNewGroupNameChange = (e) => {
+    setNewGroupName(e.target.value)
+  }
+
+  const addDocuments = async () => {
+    const documentName = textFieldInput;
+    console.log(documentName)
     const response = await fetch(API_ADDR + `/api/groups/${groupId}/documents`, {
       method: 'POST',
       headers: {
@@ -176,6 +190,11 @@ export default function Dashborad() {
   const inviteMember= () => {
     // Todo: copy invite member code to clipboard
     console.log('unimplemented feature')
+  }
+
+  const [textFieldInput, setTextFieldInput] = useState()
+  const handleChange = (e) => {
+    setTextFieldInput(e.target.value)
   }
 
   return (
@@ -202,23 +221,33 @@ export default function Dashborad() {
             open={open}
             onClose={handleClose}
         >
-          <Box>
-            {groups.map((group, idx) => {
-              return (
-                <MenuItem onClick={chageGroup} key={idx} id={group.name}>
-                  {group.name}
-                </MenuItem>
-              );
-            })}
-          </Box>
+            {groups.map((group, idx) => 
+              <MenuItem onClick={chageGroup} key={idx} id={group}>
+                {group}
+              </MenuItem>
+            )}
           <Divider sx={{ my: 0.5 }} />
 
-          <Button onClick={addGroups}>
+          <Button onClick={handleAddGroups}>
             <AddIcon />
             <Typography>
               group
             </Typography>
           </Button>
+          <Modal
+            open={addGroupModal}
+            onClose={closeModal3}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Create New Group
+              </Typography>
+              <TextField id="outlined-basic" label="title of new group" variant="outlined" onChange={handleNewGroupNameChange} />
+              <Button onClick={addGroups}>OK</Button>
+            </Box>
+          </Modal>
         </StyledMenu>
       </NavBar>
 
@@ -252,6 +281,20 @@ export default function Dashborad() {
               document
             </Typography>
           </Button>
+          <Modal
+            open={modalOpen2}
+            onClose={closeModal2}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Create New Document
+              </Typography>
+              <TextField id="outlined-basic" label="title of new document" variant="outlined" onChange={handleChange} />
+              <Button onClick={addDocuments}>OK</Button>
+            </Box>
+          </Modal>
         </div>
         <DocumentView docs={userDocuments}/>
       </div>
