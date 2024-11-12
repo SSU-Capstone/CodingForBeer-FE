@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -7,9 +7,12 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NavBar from '../components/NavBar';
 import DocumentView from '../components/DocumentView';
 import { Box, Typography, Divider } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';import * as React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { loginState } from "../recoilState";
 
 const style = {
   position: 'absolute',
@@ -70,8 +73,9 @@ export default function Dashborad() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [groupId, setGroupId] = useState('boj');
+  const [userDocuments, setUserDocuments] = useState([]);
   
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
   
@@ -86,28 +90,87 @@ export default function Dashborad() {
     setGroupId(e.target.id);
   }
 
-  const groups = [
-    {name : 'coding for beer'},
-    {name : 'asdf'},
-    {name : 'boj'},
-    {name : 'noj.am'},
-  ];
-  const members = {
-    'coding for beer' : ['a', 'b', 'c', 'd', 'e'],
-    'asdf' : ['a', 'b'],
-    'boj' : ['a', 'b', 'c'],
-    'noj.am' : ['a'],
-  }
-  const docs = {
-    'coding for beer' : ['doc1', 'doc2', 'doc3'], 
-    'asdf' : ['doc1'],
-    'boj' : ['doc1', 'doc2'],
-    'noj.am' : ['doc1', 'doc1', 'doc1', 'doc1', 'doc1']
+  const API_ADDR = import.meta.env.VITE_API_ADDR;
+
+  const [groups, setGroups] = useState([]);
+  useEffect(() => {
+    fetch(API_ADDR + '/api/groups', {
+      method: 'GET',
+      credentials: 'include',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setGroups(data)
+      setGroupId(data[0])
+      setDocuments(groupId)
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
+
+  const addGroups = async () => {
+    const groupName = 'tmp';
+    try {
+      const response = await fetch(API_ADDR+ '/api/groups', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: groupName }),
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const errMessage = await response.json();
+        throw new Error(errMessage.error || 'Error creating group');
+      }
+
+      const newGroup = await response.json();
+      console.log(newGroup)
+      // setSuccessMessage(`Group "${newGroup.name}" created successfully!`);
+      // setGroupName(''); // Clear the input field
+    } catch (err) {
+      // setError(err.message || 'Error creating group');
+    }
   }
 
-  const addGroups = () => {
-    // Todo: add group
-    console.log('unimplemented feature')
+  const setDocuments = async () => {
+    const response = await fetch(API_ADDR + `/api/groups/${groupId}/documents`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    setUserDocuments(data.document || []);
+  }
+  const handleAddDocument = () => {
+    const docName = 'doc1';
+    console.log(docName)
+    addDocuments(docName)
+  }
+
+  const addDocuments = async (documentName) => {
+    const response = await fetch(API_ADDR + `/api/groups/${groupId}/documents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ document_name: documentName }),
+      credentials: 'include',
+    });
+    console.log(response)
+
+    const data = await response.json();
+    console.log(data)
   }
 
   const inviteMember= () => {
@@ -178,23 +241,19 @@ export default function Dashborad() {
                 invite member
               </Button>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                {members[groupId].map((memberId, idx)=>{
-                  return (
-                    <p key={idx}>{memberId}</p>
-                  )
-                })}
+                {/* Todo : add member list */}
               </Typography>
             </Box>
           </Modal>
 
-          <Button>
+          <Button onClick={handleAddDocument}>
             <AddIcon />
             <Typography>
               document
             </Typography>
           </Button>
         </div>
-        <DocumentView docs={docs[groupId]}/>
+        <DocumentView docs={userDocuments}/>
       </div>
     </>
   );
