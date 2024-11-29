@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import VerticalSplitIcon from '@mui/icons-material/VerticalSplit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DownloadIcon from '@mui/icons-material/Download';
+import Marpit from '@marp-team/marpit';
 
 import { basicSetup, EditorView } from 'codemirror';
 import { keymap } from '@codemirror/view';
@@ -21,6 +22,7 @@ import yorkie from 'yorkie-js-sdk';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { githubLight } from '@uiw/codemirror-theme-github';
+import Marp from '@marp-team/marp-core';
 
 const Editor = () => {
   const [md, setMd] = useState('');
@@ -212,6 +214,56 @@ const Editor = () => {
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
+          onClick={()=>{
+            // const marpit = new Marpit();
+            // // import { Marp } from '@marp-team/marp-core'
+            // // 2. Add theme CSS
+            // const theme = `
+            // /* @theme example */
+
+            // section {
+            //   background-color: #369;
+            //   color: #fff;
+            //   font-size: 30px;
+            //   padding: 40px;
+            // }
+
+            // h1,
+            // h2 {
+            //   text-align: center;
+            //   margin: 0;
+            // }
+
+            // h1 {
+            //   color: #8cf;
+            // }
+            // `
+            // marpit.themeSet.default = marpit.themeSet.add(theme)
+
+            // Convert Markdown slide deck into HTML and CSS
+            const marp = new Marp()
+            const { html , css } = marp.render(md)
+
+            // const {html,css} = marpit.render(md);
+            const htmlFile = `
+            <!DOCTYPE html>
+            <html><body>
+              <style>${css}</style>
+              ${html}
+            </body></html>
+            `;
+
+            let w = window.open();
+            w.document.write(htmlFile);
+            w.document.close();
+            
+            w.focus();
+
+            setTimeout(() => {w.print();w.close()}, 100);
+
+            // w.print();
+            // w.close();
+          }}
         >
           <DownloadIcon />
         </IconButton>
