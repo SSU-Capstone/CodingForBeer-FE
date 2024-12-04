@@ -76,7 +76,7 @@ const Editor = () => {
     const client = clientRef.current;
     await client.activate();
 
-    docRef.current = new yorkie.Document('my-first-document');
+    docRef.current = new yorkie.Document('asdf');
     const doc = docRef.current;
     await client.attach(doc);
     doc.update(
