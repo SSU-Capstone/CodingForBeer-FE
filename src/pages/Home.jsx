@@ -42,10 +42,10 @@ const LoginCard = () => {
 export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const loginState = useRecoilValue(loginState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
 
   // Redirect to Dashboard if logged in
-  if (loginState) {
+  if (isLogin) {
     return <Navigate to="/dashboard" replace />;
   }
 
