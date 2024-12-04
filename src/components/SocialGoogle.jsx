@@ -1,5 +1,6 @@
 import { useRecoilState } from "recoil";
 import { loginState } from "../recoilState";
+import { useNavigate } from "react-router-dom";
 
 const SocialGoogle = () => {
   const [isLogin, setIsLogin] = useRecoilState(loginState);
