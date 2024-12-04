@@ -4,9 +4,21 @@ import { loginState } from "../recoilState";
 const SocialGoogle = () => {
   const [isLogin, setIsLogin] = useRecoilState(loginState);
 
+  const navigate = useNavigate(); // useNavigate hook
   const handleLogin = () => {
-    setIsLogin(true);
-    window.open('https://codingforbeer.life/backend/auth/google/', '_self');
+    
+
+    if(isLogin) {
+      // Redirect to Dashboard if logged in
+      React.useEffect(() => {
+        if (isLogin) {
+          navigate("/dashboard"); // Navigate to dashboard
+        }
+      }, [isLogin, navigate]); // Dependency on loginState and navigate
+    } else {
+      setIsLogin(true);
+      window.open('https://codingforbeer.life/backend/auth/google/', '_self');
+    }
   }
 
   return (
