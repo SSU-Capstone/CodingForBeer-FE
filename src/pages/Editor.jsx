@@ -67,7 +67,9 @@ const Editor = () => {
     }
   });
 
+
   async function main(editorParentElem) {
+    
     clientRef.current = new yorkie.Client(import.meta.env.VITE_YORKIE_API_ADDR, {
       apiKey: import.meta.env.VITE_YORKIE_API_KEY,
     });
