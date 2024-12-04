@@ -47,10 +47,11 @@ export default function Home() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isLogin, setIsLogin] = useRecoilState(loginState);
   const navigate = useNavigate(); // useNavigate hook
+  const API_ADDR = import.meta.env.VITE_API_ADDR;
 
   React.useEffect(() => {
     // Fetch login status from backend
-    fetch("/auth/status")
+    fetch(API_ADDR + "/auth/status")
       .then((response) => response.json())
       .then((data) => {
         console.log("Login status from server:", data.loggedIn);
