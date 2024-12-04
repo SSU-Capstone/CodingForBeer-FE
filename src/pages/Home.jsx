@@ -54,7 +54,7 @@ export default function Home() {
       console.log(isLogin);
       navigate("/dashboard"); // Navigate to dashboard
     }
-  }, [isLogin, navigate]); // Dependency on loginState and navigate
+  }); // Dependency on loginState and navigate
 
   return (
     <Box
