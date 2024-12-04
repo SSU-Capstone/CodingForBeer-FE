@@ -48,13 +48,16 @@ export default function Home() {
   const [isLogin, setIsLogin] = useRecoilState(loginState);
   const navigate = useNavigate(); // useNavigate hook
 
-  // Redirect to Dashboard if logged in
   React.useEffect(() => {
-    if (isLogin) {
-      console.log(isLogin);
-      navigate("/dashboard"); // Navigate to dashboard
-    }
-  }); // Dependency on loginState and navigate
+    // Fetch login status from backend
+    fetch("/auth/status")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Login status from server:", data.loggedIn);
+        setIsLogin(data.loggedIn); // Update Recoil state
+      })
+      .catch((error) => console.error("Error fetching login status:", error));
+  }, []); // Empty dependency array means it runs once on component mount
 
   return (
     <Box
