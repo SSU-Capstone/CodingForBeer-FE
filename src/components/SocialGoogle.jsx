@@ -6,7 +6,7 @@ const SocialGoogle = () => {
 
   const handleLogin = () => {
     setIsLogin(true);
-    window.open('https://codingforbeer.life/auth/google/callback', '_self');
+    window.open('https://codingforbeer.life/backend/auth/google/callback', '_self');
   }
 
   return (
