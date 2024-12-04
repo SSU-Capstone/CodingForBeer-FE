@@ -6,6 +6,7 @@ import { Box, useTheme, useMediaQuery } from "@mui/material";
 import SocialGoogle from "../components/SocialGoogle";
 import { useRecoilState } from "recoil";
 import { loginState } from "../recoilState";
+import { useNavigate } from "react-router-dom";
 
 const LoginCard = () => {
   return (
@@ -45,11 +46,14 @@ export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const navigate = useNavigate(); // useNavigate hook
 
   // Redirect to Dashboard if logged in
-  if (isLogin) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  React.useEffect(() => {
+    if (isLogin) {
+      navigate("/dashboard"); // Navigate to dashboard
+    }
+  }, [isLogin, navigate]); // Dependency on loginState and navigate
 
   return (
     <Box
