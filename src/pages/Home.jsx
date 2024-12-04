@@ -4,6 +4,8 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import SocialGoogle from "../components/SocialGoogle";
+import { useRecoilState } from "recoil";
+import { loginState } from "../recoilState";
 
 const LoginCard = () => {
   return (
