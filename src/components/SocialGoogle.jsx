@@ -12,6 +12,7 @@ const SocialGoogle = () => {
       navigate("/dashboard"); // Navigate to dashboard
     } else {
       setIsLogin(true);
+      console.log(isLogin);
       window.open('https://codingforbeer.life/backend/auth/google/', '_self');
     }
   }
