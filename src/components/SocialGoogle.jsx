@@ -10,11 +10,9 @@ const SocialGoogle = () => {
 
     if(isLogin) {
       // Redirect to Dashboard if logged in
-      React.useEffect(() => {
-        if (isLogin) {
-          navigate("/dashboard"); // Navigate to dashboard
-        }
-      }, [isLogin, navigate]); // Dependency on loginState and navigate
+      if (isLogin) {
+        navigate("/dashboard"); // Navigate to dashboard
+      }
     } else {
       setIsLogin(true);
       window.open('https://codingforbeer.life/backend/auth/google/', '_self');
