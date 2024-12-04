@@ -7,13 +7,9 @@ const SocialGoogle = () => {
 
   const navigate = useNavigate(); // useNavigate hook
   const handleLogin = () => {
-    
-
     if(isLogin) {
       // Redirect to Dashboard if logged in
-      if (isLogin) {
-        navigate("/dashboard"); // Navigate to dashboard
-      }
+      navigate("/dashboard"); // Navigate to dashboard
     } else {
       setIsLogin(true);
       window.open('https://codingforbeer.life/backend/auth/google/', '_self');

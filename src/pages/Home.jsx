@@ -51,6 +51,7 @@ export default function Home() {
   // Redirect to Dashboard if logged in
   React.useEffect(() => {
     if (isLogin) {
+      console.log(isLogin);
       navigate("/dashboard"); // Navigate to dashboard
     }
   }, [isLogin, navigate]); // Dependency on loginState and navigate
