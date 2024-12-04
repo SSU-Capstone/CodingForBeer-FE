@@ -45,7 +45,7 @@ const Editor = () => {
     if (viewUpdate.docChanged) {
       for (const tr of viewUpdate.transactions) {
         const events = ['select', 'input', 'delete', 'move', 'undo', 'redo'];
-        if (!events.map((event) => tr.isUserEvent(event)).some(Boolean)) {
+        if (!events?.map((event) => tr.isUserEvent(event)).some(Boolean)) {
           continue;
         }
         if (tr.annotation(Transaction.remote)) {
