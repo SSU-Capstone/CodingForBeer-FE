@@ -11,9 +11,8 @@ const SocialGoogle = () => {
       // Redirect to Dashboard if logged in
       navigate("/dashboard"); // Navigate to dashboard
     } else {
-      setIsLogin(true);
-      console.log(isLogin);
-      window.open('https://codingforbeer.life/backend/auth/google/', '_self');
+      console.log(isLogin,"wtf is this");
+      window.open('https://codingforbeer.life/backend/auth/google/', '_blank');
     }
   }
 
