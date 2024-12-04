@@ -5,12 +5,6 @@ import Typography from "@mui/material/Typography";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import SocialGoogle from "../components/SocialGoogle";
 
-const LoginButton = () => {
-  return (
-    
-  );
-};
-
 const LoginCard = () => {
   return (
     <Card
