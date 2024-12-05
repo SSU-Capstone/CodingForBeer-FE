@@ -17,7 +17,7 @@ const DocumentView = ({docs,group}) => {
       <Box sx={{flexGrow: 1}}>
         <Grid container spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>
           {docs.map((docName, index) => {
-            const [date1, date2] = [new Date(new Date().getTime() + Math.random() * (new Date(2025, 0, 1) - new Date())), new Date(new Date().getTime() + Math.random() * (new Date(2025, 0, 1) - new Date()) + (new Date(2025, 0, 1) - new Date()))].map(date => date.toISOString().split('T')[0]);
+            const [date1, date2] = [new Date(), new Date()].map(date => date.toISOString().split('T')[0]);
             return (
             <Grid key={index} size={{xs: 2, sm: 4, md: 4}}>
               <div

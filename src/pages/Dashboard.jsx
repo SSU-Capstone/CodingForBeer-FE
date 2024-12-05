@@ -195,9 +195,31 @@ export default function Dashboard() {
     console.log(data)
   }
 
-  const inviteMember= () => {
+  const inviteMember = async () => {
     // Todo: copy invite member code to clipboard
-    console.log('unimplemented feature')
+    console.log('unimplemented feature');
+    const response = await fetch(API_ADDR + `/api/groups/${groupId}/invite`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ document_name: documentName }),
+      credentials: 'include',
+    });
+    const data = await response.json();
+    const link = data.inviteLink;
+    const copyToClipboard = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        console.log("Text copied to clipboard:", text);
+      } catch (err) {
+        console.error("Failed to copy text to clipboard:", err);
+      }
+    };
+    
+    copyToClipboard(link);
+    alert("초대링크가 복사되었습니다!");
+
   }
 
   const [textFieldInput, setTextFieldInput] = useState()
