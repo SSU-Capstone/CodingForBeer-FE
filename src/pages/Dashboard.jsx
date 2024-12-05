@@ -137,6 +137,7 @@ export default function Dashboard() {
       const newGroup = await response.json();
       console.log(newGroup);
       // changeGroup(newGroup.name);
+      setGroups((prev)=>prev.push(newGroup.name));
       setGroupId(newGroup.name);
       setDocuments(newGroup.name);
       // setSuccessMessage(`Group "${newGroup.name}" created successfully!`);
