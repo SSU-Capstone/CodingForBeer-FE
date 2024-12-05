@@ -92,6 +92,8 @@ export default function Dashboard() {
 
   const API_ADDR = import.meta.env.VITE_API_ADDR;
 
+  const [trigger, setTrigger] = useState(false);
+
   const [groups, setGroups] = useState([]);
   useEffect(() => {
     fetch(API_ADDR + '/api/groups', {
@@ -112,7 +114,7 @@ export default function Dashboard() {
     .catch(error => {
       console.error('Error fetching data:', error);
     });
-  }, [groups]);
+  }, [trigger]);
 
   const addGroups = async () => {
     const groupName = newGroupName
@@ -132,7 +134,8 @@ export default function Dashboard() {
       }
 
       const newGroup = await response.json();
-      console.log(newGroup)
+      console.log(newGroup);
+      setTrigger((prev)=>!prev);
       // setSuccessMessage(`Group "${newGroup.name}" created successfully!`);
       // setGroupName(''); // Clear the input field
     } catch (err) {
@@ -278,7 +281,7 @@ export default function Dashboard() {
           <Button onClick={handleAddDocument}>
             <AddIcon />
             <Typography>
-              document
+              Document
             </Typography>
           </Button>
           <Modal
