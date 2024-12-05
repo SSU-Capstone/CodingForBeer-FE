@@ -203,7 +203,6 @@ export default function Dashboard() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ document_name: documentName }),
       credentials: 'include',
     });
     const data = await response.json();
