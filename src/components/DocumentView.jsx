@@ -5,11 +5,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-const DocumentView = ({docs,groupId}) => {
+const DocumentView = ({docs,group}) => {
   const navigate = useNavigate();
   const handleDocumentClick = (e) => {
     console.log(e.currentTarget.id)
-    navigate(`/editor?docu=${groupId}-${e.currentTarget.id}`);
+    navigate(`/editor?docu=${group}-${e.currentTarget.id}`);
   }
 
   return (
