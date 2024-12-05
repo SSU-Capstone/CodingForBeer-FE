@@ -9,7 +9,7 @@ const DocumentView = ({docs}) => {
   const navigate = useNavigate();
   const handleDocumentClick = (e) => {
     console.log(e.target.id)
-    navigate('/editor')
+    navigate(`/editor?docu=${e.target.id}`)
   }
 
   return (
@@ -22,7 +22,7 @@ const DocumentView = ({docs}) => {
             <Grid key={index} size={{xs: 2, sm: 4, md: 4}}>
               <div
                 onClick={handleDocumentClick}
-                id={`docName-${index + 1}`}
+                id={docName}
               >
                 <Card sx={{ minWidth: 275 }}>
                   <CardContent>
