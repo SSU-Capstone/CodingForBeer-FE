@@ -88,6 +88,7 @@ export default function Dashboard() {
 
   const chageGroup = (e) => {
     setGroupId(e.target.id);
+    setDocuments(e.target.id)
   }
 
   const API_ADDR = import.meta.env.VITE_API_ADDR;
