@@ -72,7 +72,7 @@ const StyledMenu = styled((props) => (
 export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [groupId, setGroupId] = useState('Eempty...');
+  const [groupId, setGroupId] = useState('Empty...');
   const [userDocuments, setUserDocuments] = useState([]);
   
   const [modalOpen, setModalOpen] = useState(false);
