@@ -73,8 +73,11 @@ const Editor = () => {
     });
     const client = clientRef.current;
     await client.activate();
+    
+    const url = new URL(window.location.href);
+    const document_name = url.searchParams.get("docu");
 
-    docRef.current = new yorkie.Document('my-first-document1');
+    docRef.current = new yorkie.Document(document_name);
     const doc = docRef.current;
     await client.attach(doc);
     doc.update(

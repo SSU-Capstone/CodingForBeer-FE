@@ -304,7 +304,7 @@ export default function Dashboard() {
             </Box>
           </Modal>
         </div>
-        <DocumentView docs={userDocuments}/>
+        <DocumentView docs={userDocuments} group={groupId}/>
       </div>
     </>
   );
