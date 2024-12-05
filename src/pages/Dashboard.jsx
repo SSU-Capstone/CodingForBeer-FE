@@ -86,7 +86,7 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
-  const chageGroup = (e) => {
+  const changeGroup = (e) => {
     setGroupId(e.target.id);
     setDocuments(e.target.id)
   }
@@ -115,7 +115,7 @@ export default function Dashboard() {
     .catch(error => {
       console.error('Error fetching data:', error);
     });
-  }, [trigger]);
+  }, []);
 
   const addGroups = async () => {
     const groupName = newGroupName
@@ -136,7 +136,7 @@ export default function Dashboard() {
 
       const newGroup = await response.json();
       console.log(newGroup);
-      setTrigger((prev)=>!prev);
+      changeGroup(newGroup.name);
       // setSuccessMessage(`Group "${newGroup.name}" created successfully!`);
       // setGroupName(''); // Clear the input field
     } catch (err) {
@@ -188,6 +188,7 @@ export default function Dashboard() {
     console.log(response)
 
     const data = await response.json();
+    setDocuments(groupId);
     console.log(data)
   }
 
@@ -226,7 +227,7 @@ export default function Dashboard() {
             onClose={handleClose}
         >
             {groups.map((group, idx) => 
-              <MenuItem onClick={chageGroup} key={idx} id={group}>
+              <MenuItem onClick={changeGroup} key={idx} id={group}>
                 {group}
               </MenuItem>
             )}
