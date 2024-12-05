@@ -72,7 +72,7 @@ const StyledMenu = styled((props) => (
 export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [groupId, setGroupId] = useState('boj');
+  const [groupId, setGroupId] = useState('Empty...');
   const [userDocuments, setUserDocuments] = useState([]);
   
   const [modalOpen, setModalOpen] = useState(false);
@@ -269,37 +269,13 @@ export default function Dashboard() {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-                <h2
-                  id="modal-modal-title"
-                  className="text-xl font-semibold text-gray-800 mb-4"
-                >
-                  Create New Group
-                </h2>
-                <div className="mb-4">
-                  <label
-                    htmlFor="new-group-title"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
-                    Title of New Group
-                  </label>
-                  <input
-                    id="new-group-title"
-                    type="text"
-                    placeholder="Enter group title"
-                    onChange={handleNewGroupNameChange}
-                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                  />
-                </div>
-                <button
-                  onClick={addGroups}
-                  className="w-full bg-blue-500 text-white font-medium py-2 rounded-lg hover:bg-blue-600 transition duration-200"
-                >
-                  OK
-                </button>
-              </div>
-            </div>
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Create New Group
+              </Typography>
+              <TextField id="outlined-basic" label="title of new group" variant="outlined" onChange={handleNewGroupNameChange} />
+              <Button onClick={addGroups}>OK</Button>
+            </Box>
           </Modal>
         </StyledMenu>
       </NavBar>
@@ -310,49 +286,44 @@ export default function Dashboard() {
             <h1 className={'font-bold text-3xl'}>{groupId}</h1>
           </Button>
           <Modal
-            open={modalOpen2}
-            onClose={closeModal2}
+            open={modalOpen}
+            onClose={closeModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-                <h2
-                  id="modal-modal-title"
-                  className="text-xl font-semibold text-gray-800 mb-4"
-                >
-                  Create New Document
-                </h2>
-                <div className="mb-4">
-                  <label
-                    htmlFor="new-document-title"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
-                    Title of New Document
-                  </label>
-                  <input
-                    id="new-document-title"
-                    type="text"
-                    placeholder="Enter document title"
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                  />
-                </div>
-                <button
-                  onClick={addDocuments}
-                  className="w-full bg-blue-500 text-white font-medium py-2 rounded-lg hover:bg-blue-600 transition duration-200"
-                >
-                  OK
-                </button>
-              </div>
-            </div>
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {groupId}
+              </Typography>
+              <Button onClick={inviteMember}>
+                invite member
+              </Button>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                {/* Todo : add member list */}
+              </Typography>
+            </Box>
           </Modal>
+
           <Button onClick={handleAddDocument}>
             <AddIcon />
             <Typography>
               Document
             </Typography>
           </Button>
+          <Modal
+            open={modalOpen2}
+            onClose={closeModal2}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Create New Document
+              </Typography>
+              <TextField id="outlined-basic" label="title of new document" variant="outlined" onChange={handleChange} />
+              <Button onClick={addDocuments}>OK</Button>
+            </Box>
+          </Modal>
         </div>
         <DocumentView docs={userDocuments} group={groupId}/>
       </div>
