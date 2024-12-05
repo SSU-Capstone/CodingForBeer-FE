@@ -69,7 +69,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function Dashborad() {
+export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [groupId, setGroupId] = useState('boj');
@@ -112,7 +112,7 @@ export default function Dashborad() {
     .catch(error => {
       console.error('Error fetching data:', error);
     });
-  }, []);
+  }, [groups]);
 
   const addGroups = async () => {
     const groupName = newGroupName
@@ -199,7 +199,7 @@ export default function Dashborad() {
 
   return (
     <>
-      <NavBar title={'Dashborad'}>
+      <NavBar title={'Dashboard'}>
         <Button
             id="demo-customized-button"
             aria-controls={open ? 'demo-customized-menu' : undefined}
