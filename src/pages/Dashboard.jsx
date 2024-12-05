@@ -353,20 +353,6 @@ export default function Dashboard() {
               Document
             </Typography>
           </Button>
-          <Modal
-            open={modalOpen2}
-            onClose={closeModal2}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Create New Document
-              </Typography>
-              <TextField id="outlined-basic" label="title of new document" variant="outlined" onChange={handleChange} />
-              <Button onClick={addDocuments}>OK</Button>
-            </Box>
-          </Modal>
         </div>
         <DocumentView docs={userDocuments} group={groupId}/>
       </div>
