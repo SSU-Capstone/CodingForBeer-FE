@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography';
 const DocumentView = ({docs}) => {
   const navigate = useNavigate();
   const handleDocumentClick = (e) => {
-    console.log(e.target.id)
-    navigate(`/editor?docu=${e.target.id}`)
+    console.log(e.currentTarget.id)
+    navigate(`/editor?docu=${e.currentTarget.id}`)
   }
 
   return (
@@ -22,7 +22,7 @@ const DocumentView = ({docs}) => {
             <Grid key={index} size={{xs: 2, sm: 4, md: 4}}>
               <div
                 onClick={handleDocumentClick}
-                id={docName}
+                id={docName || "no"}
               >
                 <Card sx={{ minWidth: 275 }}>
                   <CardContent>
