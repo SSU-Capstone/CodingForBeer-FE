@@ -306,7 +306,7 @@ export default function Dashboard() {
 
       <div className='flex flex-col p-4 gap-10'>
         <div className='flex justify-between mx-4'>
-          <Button onClick={openModal}>
+          <Button onClick={inviteMember}>
             <h1 className={'font-bold text-3xl'}>{groupId}</h1>
           </Button>
           <Modal
